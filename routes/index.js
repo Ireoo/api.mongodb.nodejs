@@ -5,17 +5,22 @@ var mongojs  = require('mongojs');
 /**
  * 获取mongodb数据库参数
  */
-var port     = process.env.MONGODB_PORT_27017_TCP_PORT;
-var addr     = process.env.MONGODB_PORT_27017_TCP_ADDR;
-var instance = process.env.MONGODB_INSTANCE_NAME;
-var password = process.env.MONGODB_PASSWORD;
-var username = process.env.MONGODB_USERNAME;
+var port     = process.env.MONGODB_PORT_27017_TCP_PORT || 27017;
+var addr     = process.env.MONGODB_PORT_27017_TCP_ADDR || 'localhost';
+var instance = process.env.MONGODB_INSTANCE_NAME || 'api';
+var password = process.env.MONGODB_PASSWORD || '';
+var username = process.env.MONGODB_USERNAME || '';
 
 /**
  * 设置mongodb数据库连接
  * @type {mongojs}
  */
-var mongodb  = mongojs("localhost/api");
+var mongodb;
+if(username === '' && password === '') {
+    mongodb  = mongojs(addr + ':' + port + '/' + instance);
+} else {
+    mongodb  = mongojs(username + ':' + password +'@' + addr + ':' + port + '/' + instance);
+}
 
 /**
  * 初始化颜色主题
@@ -116,7 +121,7 @@ exports.mongoDB = function(req, res, next) {
          * 执行修改数据命令
          */
         case 'update':
-            db.update(where, data, other, function(err, result) {
+            db.update(where, data, function(err, result) {
                 console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
                 res.send(err ? err : result);
             });
