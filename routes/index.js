@@ -3,11 +3,9 @@
  * GET home page.
  */
 
-var basic  = require('../lib/basic');
-// var db     = require('../lib/db');
-var colors = require("colors");
-
-var mongojs = require('mongojs');
+var basic    = require('../lib/basic');
+var colors   = require("colors");
+var mongojs  = require('mongojs');
 
 var port     = process.env.MONGODB_PORT_27017_TCP_PORT;
 var addr     = process.env.MONGODB_PORT_27017_TCP_ADDR;
@@ -32,14 +30,6 @@ colors.setTheme({
 
 exports.index = function(req, res, next) {
     res.send("Welcome to QIYI api.");
-};
-
-exports.stats = function(req, res, next) {
-    var db = eval("mongojs(mongodb, ['" + req.params.key + "'])." + req.params.key);
-
-    db.stats(function (err, result) {
-        res.send(result);
-    });
 };
 
 exports.edit = function(req, res) {

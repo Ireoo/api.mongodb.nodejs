@@ -7,7 +7,14 @@ var app        = express();
 var logger     = require('morgan');
 var routes     = require('./routes');
 
+/**
+ * 显示访问信息
+ */
 app.use(logger('dev'));
+
+/**
+ * 获取数据流并保存在req.input里面
+ */
 app.use(function(req, res, next){
     var reqData = [];
     var size = 0;
@@ -23,36 +30,37 @@ app.use(function(req, res, next){
     next();
 });
 
-//处理post data
+/**
+ * 处理数据流成POST数据
+ */
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-// view engine setup
+/**
+ * 设置默认网页路径，并设置网页后缀
+ */
 app.set('views', require('path').join(__dirname, 'www'));
 app.engine('html', require('ejs').__express);
 app.set('view engine', 'html');
 
-// app.use(app.router);
+/**
+ * 设置include文件的路径
+ */
 app.use(express.static(__dirname + '/include'));
 
-//app.use(function(req, res, next) {
-//    console.log('%s http://%s%s', req.method, req.headers.host, req.url);
-//    console.log(req.headers);
-//    console.log(basic.getIP(req));
-//    if(basic.getIP(req) != '115.29.190.77' && basic.getIP(req) != '121.43.106.166') {
-//       console.log('拦截IP：%s 的访问！', basic.getIP(req));
-//       res.send("未授权用户，无法访问!");
-//    }else{
-//       next();
-//    }
-//});
+/**
+ * 全局处理，比如验证key等信息
+ */
+// app.use(function(req, res, next) {
+//     console.log('%s http://%s%s', req.method, req.headers.host, req.url);
+//     console.log(req.headers);
+//     console.log(basic.getIP(req));
+//     next();
+// });
 
 //主体
 app.get('/', routes.index);
-// app.get('/count', routes.count);
 app.post('/:key', routes.stats);
-// app.get('/:key', routes.list);
-// app.get('/:key/:id', routes.info);
 app.post('/:key/:mode', routes.edit);
 
 var server = app.listen(80, function() {
