@@ -142,6 +142,16 @@ exports.mongoDB = function(req, res, next) {
             break;
 
         /**
+         * 删除该数据库
+         */
+        case 'drop':
+            db.drop(function(err, result) {
+                console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
+                res.send(err ? err : result);
+            });
+            break;
+
+        /**
          * 获取该表状态信息
          */
         case 'stats':
