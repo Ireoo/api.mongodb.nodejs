@@ -4,11 +4,28 @@
 var express    = require('express');
 var bodyParser = require('body-parser');
 var app        = express();
+var logger     = require('morgan');
 var routes     = require('./routes');
+
+app.use(logger('dev'));
+app.use(function(req, res, next){
+    var reqData = [];
+    var size = 0;
+    req.on('data', function (data) {
+        // console.log('>>>req on');
+        reqData.push(data);
+        size += data.length;
+    });
+    req.on('end', function () {
+        // console.log('>>>req end');
+        req.input = Buffer.concat(reqData, size);
+    });
+    next();
+});
 
 //处理post data
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({extended: true}));
 
 // view engine setup
 app.set('views', require('path').join(__dirname, 'www'));
@@ -32,11 +49,11 @@ app.use(express.static(__dirname + '/include'));
 
 //主体
 app.get('/', routes.index);
-app.get('/count', routes.count);
-app.get('/stats', routes.stats);
+// app.get('/count', routes.count);
+app.post('/:key', routes.stats);
 // app.get('/:key', routes.list);
 // app.get('/:key/:id', routes.info);
-// app.post('/:key/:type', routes.edit);
+app.post('/:key/:mode', routes.edit);
 
 var server = app.listen(80, function() {
     console.log('Listening on port %d', server.address().port);
