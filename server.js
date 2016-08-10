@@ -58,11 +58,16 @@ app.use(express.static(__dirname + '/include'));
 //     next();
 // });
 
-//主体
+/**
+ * 路由规则
+ */
 app.get('/', routes.index);
-app.post('/:key', routes.stats);
-app.post('/:key/:mode', routes.edit);
+app.post('/', routes.index);
+app.post('/:key/:mode', routes.mongoDB);
 
+/**
+ * 设置服务器端口为80
+ */
 var server = app.listen(80, function() {
     console.log('Listening on port %d', server.address().port);
 });
