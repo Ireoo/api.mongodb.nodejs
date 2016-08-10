@@ -162,7 +162,8 @@ exports.mongoDB = function(req, res, next) {
          * 当不存在该指令时返回404
          */
         default:
-            res.send(404);
+            console.log("[output] --> ".info + "404 NOT FOUND!".error);
+            res.status(404).send("404 NOT FOUND!");
             break;
     }
 
