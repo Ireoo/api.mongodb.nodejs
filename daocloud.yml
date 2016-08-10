@@ -1,0 +1,4 @@
+image: node:onbuild
+
+script:
+    - node -v

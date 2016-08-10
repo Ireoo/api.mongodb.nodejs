@@ -1,0 +1,16 @@
+{
+	"name"         : "api",
+	"description"  : "mongodb api basic test",
+	"version"      : "0.0.1",
+	"main"         : "server.js",
+	"private"      : true,
+	"dependencies" : {
+		"body-parser": "*",
+		"ejs": "*",
+		"express": "*",
+		"colors": "*",
+		"mongojs": "*",
+		"needle": "*",
+		"cheerio": "*"
+	}
+}
