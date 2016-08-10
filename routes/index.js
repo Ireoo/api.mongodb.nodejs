@@ -21,16 +21,16 @@ var mongodb  = mongojs("localhost/api");
  * 初始化颜色主题
  */
 colors.setTheme({
-    silly: 'rainbow',
-    input: 'grey',
-    verbose: 'cyan',
-    prompt: 'grey',
-    info: 'green',
-    data: 'blue',
-    help: 'cyan',
-    warn: 'yellow',
-    debug: 'blue',
-    error: 'red'
+    silly   : 'rainbow',
+    input   : 'grey',
+    verbose : 'cyan',
+    prompt  : 'grey',
+    info    : 'green',
+    data    : 'blue',
+    help    : 'cyan',
+    warn    : 'yellow',
+    debug   : 'blue',
+    error   : 'red'
 });
 
 /**
@@ -116,17 +116,7 @@ exports.mongoDB = function(req, res, next) {
          * 执行修改数据命令
          */
         case 'update':
-            db.update(where, {$set: data}, other, function(err, result) {
-                console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
-                res.send(err ? err : result);
-            });
-            break;
-
-        /**
-         * 执行修改叠加命令
-         */
-        case 'plus':
-            db.update(where, {$inc: data}, other, function(err, result) {
+            db.update(where, data, other, function(err, result) {
                 console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
                 res.send(err ? err : result);
             });
@@ -136,7 +126,7 @@ exports.mongoDB = function(req, res, next) {
          * 执行删除命令
          */
         case 'remove':
-            db.remove(data, other, function(err, result) {
+            db.remove(where, function(err, result) {
                 console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
                 res.send(err ? err : result);
             });
@@ -166,7 +156,7 @@ exports.mongoDB = function(req, res, next) {
          * 创建索引
          */
         case 'createIndex':
-            db.ensureIndex(data, other, function(err, result) {
+            db.ensureIndex(where, other, function(err, result) {
                 console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
                 res.send(err ? err : result);
             });
@@ -207,16 +197,6 @@ exports.mongoDB = function(req, res, next) {
          */
         case 'getIndexes':
             db.getIndexes(function(err, result) {
-                console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
-                res.send(err ? err : result);
-            });
-            break;
-
-        /**
-         * 获取索引信息
-         */
-        case 'getIndex':
-            db.getIndex({index: ""}, function(err, result) {
                 console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
                 res.send(err ? err : result);
             });
