@@ -70,9 +70,9 @@ exports.mongoDB = function(req, res, next) {
      * 格式化数据流里各项参数where, data, other为JSON格式
      * @type {{}}
      */
-    var where = JSON.stringify(input.where)=='[]' || !input.where ? {} : input.where;
-    var data  = JSON.stringify(input.data)=='[]' || !input.data ? {} : input.data;
-    var other = JSON.stringify(input.other)=='[]' || !input.other ? {} : input.other;
+    var where = JSON.stringify(input.where) == '[]' || !input.where ? {} : input.where;
+    var data  = JSON.stringify(input.data) == '[]'  || !input.data  ? {} : input.data;
+    var other = JSON.stringify(input.other) == '[]' || !input.other ? {} : input.other;
 
     /**
      * 主体程序入口处
@@ -92,7 +92,11 @@ exports.mongoDB = function(req, res, next) {
          * 执行查找命令
          */
         case 'find':
-            db.find(where).sort(other, function(err, result) {
+            var sort  = JSON.stringify(other.sort) == '[]' || !other.sort ? {} : other.sort,
+                skip  = other.skip || 0,
+                limit = other.limit || 20;
+
+            db.find(where).skip(skip).limit(limit).sort(sort, function(err, result) {
                 console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
                 res.send(err ? err : result);
             });
@@ -159,10 +163,70 @@ exports.mongoDB = function(req, res, next) {
             break;
 
         /**
+         * 创建索引
+         */
+        case 'createIndex':
+            db.ensureIndex(data, other, function(err, result) {
+                console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
+                res.send(err ? err : result);
+            });
+            break;
+
+        /**
+         * 重建索引
+         */
+        case 'reIndex':
+            db.reIndex(function(err, result) {
+                console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
+                res.send(err ? err : result);
+            });
+            break;
+
+        /**
+         * 删除指定索引
+         */
+        case 'dropIndex':
+            db.dropIndex(where.index, function(err, result) {
+                console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
+                res.send(err ? err : result);
+            });
+            break;
+
+        /**
+         * 删除全部索引
+         */
+        case 'dropIndexes':
+            db.dropIndexes(function(err, result) {
+                console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
+                res.send(err ? err : result);
+            });
+            break;
+
+        /**
+         * 获取索引信息
+         */
+        case 'getIndexes':
+            db.getIndexes(function(err, result) {
+                console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
+                res.send(err ? err : result);
+            });
+            break;
+
+        /**
+         * 获取索引信息
+         */
+        case 'getIndex':
+            db.getIndex({index: ""}, function(err, result) {
+                console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
+                res.send(err ? err : result);
+            });
+            break;
+
+        /**
          * 当不存在该指令时返回404
          */
         default:
-            console.log("[output] --> ".info + "404 NOT FOUND!".error);
+            console.log("[output] --> ".info + ("MODE[" + req.params.mode + "] no find!").error);
             res.status(404).send("404 NOT FOUND!");
             break;
     }
