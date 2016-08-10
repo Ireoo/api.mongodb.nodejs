@@ -121,7 +121,7 @@ exports.mongoDB = function(req, res, next) {
          * 执行修改数据命令
          */
         case 'update':
-            db.update(where, data, function(err, result) {
+            db.update(where, data, other, function(err, result) {
                 console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
                 res.send(err ? err : result);
             });
