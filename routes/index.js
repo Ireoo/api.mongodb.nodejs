@@ -79,6 +79,10 @@ exports.mongoDB = function(req, res, next) {
     var data  = JSON.stringify(input.data) == '[]'  || !input.data  ? {} : input.data;
     var other = JSON.stringify(input.other) == '[]' || !input.other ? {} : input.other;
 
+    if(where.hasOwnProperty('_id') && where._id != '') {
+        where._id = mongojs.ObjectId(where._id);
+    }
+
     /**
      * 主体程序入口处
      */
