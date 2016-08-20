@@ -55,6 +55,7 @@ exports.index = function(req, res, next) {
  * @param next
  */
 exports.mongoDB = function(req, res, next) {
+
     /**
      * 切换到 {req.params.key} 数据表
      */
