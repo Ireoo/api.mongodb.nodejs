@@ -103,7 +103,7 @@ exports.mongoDB = function(req, res, next) {
          */
         case 'find':
             var sort  = JSON.stringify(other.sort) == '[]' || !other.sort ? {} : other.sort,
-                show  = JSON.stringify(other.sort) == '[]' || !other.show ? {} : other.show,
+                show  = JSON.stringify(other.show) == '[]' || !other.show ? {} : other.show,
                 skip  = other.skip || 0,
                 limit = other.limit || 20;
 
@@ -118,6 +118,17 @@ exports.mongoDB = function(req, res, next) {
          */
         case 'findone':
             db.findOne(where, function(err, result) {
+                console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
+                res.send(err ? err : result);
+            });
+            break;
+
+        /**
+         * 执行聚合查询命令
+         */
+        case 'distinct':
+            var dis  = JSON.stringify(other.distinct) == '[]' || !other.distinct ? '' : other.distinct;
+            db.distinct(dis, where, function(err, result) {
                 console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
                 res.send(err ? err : result);
             });
