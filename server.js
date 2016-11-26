@@ -10,7 +10,7 @@ var routes     = require('./routes');
 /**
  * 显示访问信息
  */
-app.use(logger('dev'));
+app.use(logger('combined'));
 
 /**
  * 获取数据流并保存在req.input里面
