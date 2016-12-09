@@ -117,7 +117,7 @@ exports.mongoDB = function(req, res, next) {
          * 执行查找一条数据命令
          */
         case 'findone':
-            db.findOne(where, function(err, result) {
+            db.findOne(where, sort, function(err, result) {
                 console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
                 res.send(err ? err : result);
             });
