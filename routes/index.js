@@ -105,9 +105,15 @@ exports.mongoDB = function(req, res, next) {
             var sort  = JSON.stringify(other.sort) == '[]' || !other.sort ? {} : other.sort,
                 show  = JSON.stringify(other.show) == '[]' || !other.show ? {} : other.show,
                 skip  = other.skip || 0,
-                limit = other.limit || 20;
+                limit = other.limit || 0,
+                sql;
 
-            db.find(where, show).skip(skip).limit(limit).sort(sort, function(err, result) {
+            if(limit == 0) {
+                sql = db.find(where, show);
+            } else {
+                sql = db.find(where, show).skip(skip).limit(limit);
+            }
+            sql.sort(sort, function(err, result) {
                 console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
                 res.send(err ? err : result);
             });
