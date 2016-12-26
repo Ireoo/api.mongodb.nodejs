@@ -5,21 +5,27 @@ var mongojs  = require('mongojs');
 /**
  * 获取mongodb数据库参数
  */
-var port     = process.env.MONGODB_PORT_27017_TCP_PORT || 27017;
-var addr     = process.env.MONGODB_PORT_27017_TCP_ADDR || 'localhost';
-var instance = process.env.MONGODB_INSTANCE_NAME || 'api';
-var password = process.env.MONGODB_PASSWORD || '';
-var username = process.env.MONGODB_USERNAME || '';
+var port     = 27017;
+var addr     = 'localhost';
+var instance = 'api';
+var password = '';
+var username = '';
+
+var connect  = process.env.MONGODB_CONNECTION || '';
 
 /**
  * 设置mongodb数据库连接
  * @type {mongojs}
  */
 var mongodb;
-if(username == '' && password == '') {
-    mongodb  = mongojs(addr + ':' + port + '/' + instance);
+if(connect == '') {
+    if(username == '' && password == '') {
+        mongodb = mongojs(addr + ':' + port + '/' + instance);
+    } else {
+        mongodb  = mongojs(username + ':' + password +'@' + addr + ':' + port + '/' + instance);
+    }
 } else {
-    mongodb  = mongojs(username + ':' + password +'@' + addr + ':' + port + '/' + instance);
+    mongodb  = mongojs(connect);
 }
 
 /**
