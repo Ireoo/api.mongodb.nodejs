@@ -81,6 +81,6 @@ app.post('/:key/:mode', routes.mongoDB);
 /**
  * 设置服务器端口为80
  */
-var server = app.listen(2012, function() {
+var server = app.listen(80, function() {
     console.log('Listening on port %d', server.address().port);
 });
