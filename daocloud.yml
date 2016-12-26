@@ -1,4 +1,5 @@
-image: node:onbuild
-
-script:
-    - node -v
+build:
+    image:
+        dockerfile_path: Dockerfile
+        build_dir: /
+        cache: false
