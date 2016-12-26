@@ -10,7 +10,7 @@ var routes     = require('./routes');
 /**
  * 显示访问信息
  */
-app.use(logger('combined'));
+app.use(logger('dev')); //combined'));
 
 /**
  * 获取数据流并保存在req.input里面
@@ -81,6 +81,6 @@ app.post('/:key/:mode', routes.mongoDB);
 /**
  * 设置服务器端口为80
  */
-var server = app.listen(80, function() {
+var server = app.listen(2012, function() {
     console.log('Listening on port %d', server.address().port);
 });
