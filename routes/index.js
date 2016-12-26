@@ -16,7 +16,7 @@ var username = process.env.MONGODB_USERNAME || '';
  * @type {mongojs}
  */
 var mongodb;
-if(username === '' && password === '') {
+if(username == '' && password == '') {
     mongodb  = mongojs(addr + ':' + port + '/' + instance);
 } else {
     mongodb  = mongojs(username + ':' + password +'@' + addr + ':' + port + '/' + instance);
