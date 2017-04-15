@@ -1,11 +1,11 @@
 /**
  * Created by S2 on 15/7/7.
  */
-var express    = require('express');
+var express = require('express');
 var bodyParser = require('body-parser');
-var app        = express();
-var logger     = require('morgan');
-var routes     = require('./routes');
+var app = express();
+var logger = require('morgan');
+var routes = require('./routes');
 
 /**
  * 显示访问信息
@@ -15,15 +15,15 @@ app.use(logger('dev')); //combined'));
 /**
  * 获取数据流并保存在req.input里面
  */
-app.use(function(req, res, next){
+app.use(function(req, res, next) {
     var reqData = [];
     var size = 0;
-    req.on('data', function (data) {
+    req.on('data', function(data) {
         // console.log('>>>req on');
         reqData.push(data);
         size += data.length;
     });
-    req.on('end', function () {
+    req.on('end', function() {
         // console.log('>>>req end');
         req.input = Buffer.concat(reqData, size);
     });
@@ -34,7 +34,7 @@ app.use(function(req, res, next){
  * 处理数据流成POST数据
  */
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 /**
  * 设置默认网页路径，并设置网页后缀
@@ -70,7 +70,7 @@ app.post('/:key/:mode', function(req, res, next) {
      * @type {{}}
      */
     var input = JSON.parse(req.input);
-    if(input.key == 'ireoo') {
+    if (input.key == (process.env.KEY || "ireoo")) {
         next();
     } else {
         res.status(404).send("授权失败!请勿越权使用!");
