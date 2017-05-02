@@ -5,8 +5,8 @@ var mongojs  = require('mongojs');
 /**
  * 获取mongodb数据库参数
  */
-var port     = 27017;
-var addr     = 'localhost';
+var port     = 29281;
+var addr     = 'ds129281.mlab.com';
 var instance = 'heroku_4bqc5q84';
 var password = 'cc880108';
 var username = 'api';
