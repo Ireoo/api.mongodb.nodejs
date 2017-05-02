@@ -7,9 +7,9 @@ var mongojs  = require('mongojs');
  */
 var port     = 27017;
 var addr     = 'localhost';
-var instance = 'api';
-var password = '';
-var username = '';
+var instance = 'heroku_4bqc5q84';
+var password = 'cc880108';
+var username = 'api';
 
 var connect  = process.env.MONGODB_CONNECTION || '';
 
