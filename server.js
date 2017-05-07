@@ -10,7 +10,7 @@ var routes = require('./routes');
 /**
  * 显示访问信息
  */
-app.use(logger('dev')); //combined'));
+app.use(logger('[:date[iso]] :remote-addr[:remote-user] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - :response-time ms')); //combined'));
 
 /**
  * 获取数据流并保存在req.input里面
