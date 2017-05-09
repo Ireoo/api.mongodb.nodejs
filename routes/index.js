@@ -51,7 +51,7 @@ colors.setTheme({
  * @param next
  */
 exports.index = function(req, res, next) {
-    res.send("Welcome to QIYI api.");
+    res.send("Welcome to api.");
 };
 
 /**
