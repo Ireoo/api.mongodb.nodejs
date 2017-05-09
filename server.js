@@ -7,11 +7,17 @@ var app = express();
 var logger = require('morgan');
 var routes = require('./routes');
 var config = require('./config');
+var compression = require('compression');
 
 /**
  * 显示访问信息
  */
 app.use(logger('[:date[iso]] :remote-addr[:remote-user] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - :response-time ms'));
+
+/**
+ * 添加gzip
+ */
+app.use(compression());
 
 /**
  * 获取数据流并保存在req.input里面
@@ -53,10 +59,14 @@ app.use(express.static(__dirname + '/include'));
  * 全局处理，比如验证key等信息
  */
 app.use(function(req, res, next) {
-    if(req.headers.host === (config.domain || '127.0.0.1')) {
-        next();
+    if(config && config.domain && config.domain !== '') {
+        if (req.headers.host === (config.domain || '127.0.0.1')) {
+            next();
+        } else {
+            res.status(404).send('NOT FOUND!!!');
+        }
     } else {
-        res.status(404).send('NOT FOUND!!!');
+        next();
     }
 //     console.log('%s http://%s%s', req.method, req.headers.host, req.url);
 //     console.log(req.headers);
