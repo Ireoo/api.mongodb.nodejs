@@ -53,7 +53,7 @@ app.use(express.static(__dirname + '/include'));
  * 全局处理，比如验证key等信息
  */
 app.use(function(req, res, next) {
-    if(req.headers.host === config.domain || '127.0.0.1') {
+    if(req.headers.host === (config.domain || '127.0.0.1')) {
         next();
     } else {
         res.status(404).send('NOT FOUND!!!');
