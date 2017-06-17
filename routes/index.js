@@ -62,7 +62,7 @@ exports.index = function(req, res, next) {
  */
 exports.mongoDB = function(req, res, next) {
 
-    if (req.params.key && req.params.key !== '') {
+    if (req.params.key && req.params.key != '' && req.params.key != 'undefined') {
 
         /**
          * 切换到 {req.params.key} 数据表
