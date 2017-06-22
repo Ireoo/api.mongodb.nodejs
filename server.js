@@ -95,8 +95,8 @@ app.post('/:key/:mode', function(req, res, next) {
 app.post('/:key/:mode', routes.mongoDB);
 
 /**
- * 设置服务器端口为80
+ * 设置服务器端口为2012
  */
-var server = app.listen(process.env.PORT || 80, function() {
+var server = app.listen(process.env.PORT || 2012, function() {
     console.log('Listening on port %s:%d', server.address().address, server.address().port);
 });
