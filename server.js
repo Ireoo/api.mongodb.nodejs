@@ -77,10 +77,9 @@ app.use(function(req, res, next) {
 /**
  * 路由规则
  */
-app.get('/', routes.index);
-app.post('/', routes.index);
+app.all('/', routes.index);
 
-app.post('/:key/:mode', function(req, res, next) {
+app.all('/:key/:mode', function(req, res, next) {
     /**
      * 格式化数据流数据为JSON格式
      * @type {{}}
@@ -92,7 +91,7 @@ app.post('/:key/:mode', function(req, res, next) {
         res.status(404).send("授权失败!请勿越权使用!");
     }
 });
-app.post('/:key/:mode', routes.mongoDB);
+app.all('/:key/:mode', routes.mongoDB);
 
 /**
  * 设置服务器端口为2012
