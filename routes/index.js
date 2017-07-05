@@ -1,23 +1,23 @@
-var basic = require('../lib/basic');
-var colors = require("colors");
-var mongojs = require('mongojs');
+const basic = require('../lib/basic');
+const colors = require("colors");
+const mongojs = require('mongojs');
 
 /**
  * 获取mongodb数据库参数
  */
-var port = 27017;
-var addr = 'localhost';
-var instance = 'api';
-var password = '';
-var username = '';
+const port = 27017;
+const addr = 'localhost';
+const instance = 'api';
+const password = '';
+const username = '';
 
-var connect = process.env.MONGODB_CONNECTION || '';
+const connect = process.env.MONGODB_CONNECTION || '';
 
 /**
  * 设置mongodb数据库连接
  * @type {mongojs}
  */
-var mongodb;
+let mongodb;
 if (connect == '') {
     if (username == '' && password == '') {
         mongodb = mongojs(addr + ':' + port + '/' + instance);
@@ -50,7 +50,7 @@ colors.setTheme({
  * @param res
  * @param next
  */
-exports.index = function(req, res, next) {
+exports.index = (req, res, next) => {
     res.send("Welcome to api.");
 };
 
@@ -60,20 +60,20 @@ exports.index = function(req, res, next) {
  * @param res
  * @param next
  */
-exports.mongoDB = function(req, res, next) {
+exports.mongoDB = (req, res, next) => {
 
     if (req.params.key && req.params.key != '' && req.params.key != 'undefined') {
 
         /**
          * 切换到 {req.params.key} 数据表
          */
-        var db = eval("mongodb." + req.params.key);
+        let db = eval("mongodb." + req.params.key);
 
         /**
          * 格式化数据流数据为JSON格式
          * @type {{}}
          */
-        var input = JSON.parse(req.input);
+        let input = req.input;
 
         /**
          * 调试输出获取的数据流信息
@@ -84,9 +84,9 @@ exports.mongoDB = function(req, res, next) {
          * 格式化数据流里各项参数where, data, other为JSON格式
          * @type {{}}
          */
-        var where = JSON.stringify(input.where) == '[]' || !input.where ? {} : input.where;
-        var data = JSON.stringify(input.data) == '[]' || !input.data ? {} : input.data;
-        var other = JSON.stringify(input.other) == '[]' || !input.other ? {} : input.other;
+        let where = JSON.stringify(input.where) == '[]' || !input.where ? {} : input.where;
+        let data = JSON.stringify(input.data) == '[]' || !input.data ? {} : input.data;
+        let other = JSON.stringify(input.other) == '[]' || !input.other ? {} : input.other;
 
         if (where.hasOwnProperty('_id') && where._id != '') {
             where._id = mongojs.ObjectId(where._id);
@@ -110,7 +110,7 @@ exports.mongoDB = function(req, res, next) {
                  * 执行查找命令
                  */
             case 'find':
-                var sort = JSON.stringify(other.sort) == '[]' || !other.sort ? {} : other.sort,
+                let sort = JSON.stringify(other.sort) == '[]' || !other.sort ? {} : other.sort,
                     show = JSON.stringify(other.show) == '[]' || !other.show ? {} : other.show,
                     skip = other.skip || 0,
                     limit = other.limit || 0,
@@ -131,7 +131,7 @@ exports.mongoDB = function(req, res, next) {
                  * 执行查找一条数据命令
                  */
             case 'findone':
-                var show = JSON.stringify(other.show) == '[]' || !other.show ? {} : other.show;
+                let show = JSON.stringify(other.show) == '[]' || !other.show ? {} : other.show;
                 db.findOne(where, show, function(err, result) {
                     console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
                     res.send(err ? err : result);
@@ -142,7 +142,7 @@ exports.mongoDB = function(req, res, next) {
                  * 执行聚合查询命令
                  */
             case 'distinct':
-                var dis = JSON.stringify(other.distinct) == '[]' || !other.distinct ? '' : other.distinct;
+                let dis = JSON.stringify(other.distinct) == '[]' || !other.distinct ? '' : other.distinct;
                 db.distinct(dis, where, function(err, result) {
                     console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
                     res.send(err ? err : result);
@@ -262,3 +262,4 @@ exports.mongoDB = function(req, res, next) {
         res.status(404).send("404 NOT FOUND!");
     }
 };
+

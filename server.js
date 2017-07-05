@@ -1,13 +1,13 @@
 /**
  * Created by S2 on 15/7/7.
  */
-var express = require('express');
-var bodyParser = require('body-parser');
-var app = express();
-var logger = require('morgan');
-var routes = require('./routes');
-var config = require('./config');
-var compression = require('compression');
+const express = require('express');
+const bodyParser = require('body-parser');
+const app = express();
+const logger = require('morgan');
+const routes = require('./routes');
+const config = require('./config');
+const compression = require('compression');
 
 /**
  * 显示访问信息
@@ -23,16 +23,16 @@ app.use(compression());
  * 获取数据流并保存在req.input里面
  */
 app.use(function(req, res, next) {
-    var reqData = [];
-    var size = 0;
-    req.on('data', function(data) {
+    let reqData = [];
+    let size = 0;
+    req.on('data', (data) => {
         // console.log('>>>req on');
         reqData.push(data);
         size += data.length;
     });
-    req.on('end', function() {
+    req.on('end', () => {
         // console.log('>>>req end');
-        req.input = Buffer.concat(reqData, size);
+        req.input = JSON.parse(Buffer.concat(reqData, size));
     });
     next();
 });
@@ -58,7 +58,7 @@ app.use(express.static(__dirname + '/include'));
 /**
  * 全局处理，比如验证key等信息
  */
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
     if(config && config.domain && config.domain !== '') {
         if (req.headers.host === (config.domain || '127.0.0.1')) {
             next();
@@ -79,13 +79,12 @@ app.use(function(req, res, next) {
  */
 app.all('/', routes.index);
 
-app.all('/:key/:mode', function(req, res, next) {
+app.all('/:key/:mode', (req, res, next) => {
     /**
      * 格式化数据流数据为JSON格式
      * @type {{}}
      */
-    var input = JSON.parse(req.input);
-    if (input.key == (process.env.KEY || "ireoo")) {
+    if (req.input.key == (process.env.KEY || "ireoo")) {
         next();
     } else {
         res.status(404).send("授权失败!请勿越权使用!");
@@ -96,6 +95,7 @@ app.all('/:key/:mode', routes.mongoDB);
 /**
  * 设置服务器端口为2012
  */
-var server = app.listen(process.env.PORT || 2012, function() {
+const server = app.listen(process.env.PORT || 2012, () => {
     console.log('Listening on port %s:%d', server.address().address, server.address().port);
 });
+
