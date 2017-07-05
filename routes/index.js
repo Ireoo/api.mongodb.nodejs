@@ -131,7 +131,7 @@ exports.mongoDB = (req, res, next) => {
                  * 执行查找一条数据命令
                  */
             case 'findone':
-                let show = JSON.stringify(other.show) == '[]' || !other.show ? {} : other.show;
+                show = JSON.stringify(other.show) == '[]' || !other.show ? {} : other.show;
                 db.findOne(where, show, function(err, result) {
                     console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
                     res.send(err ? err : result);
@@ -262,4 +262,5 @@ exports.mongoDB = (req, res, next) => {
         res.status(404).send("404 NOT FOUND!");
     }
 };
+
 
