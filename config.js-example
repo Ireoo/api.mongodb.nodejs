@@ -1,4 +1,5 @@
 exports = module.exports = {
-	// domain: process.env.HOST || 'localhost',
-	port: process.env.PORT || 80
+	// host: process.env.HOST || 'localhost',
+	port: process.env.PORT || 80,
+	key: process.env.KEY || 'ireoo'
 };

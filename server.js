@@ -22,7 +22,7 @@ app.use(compression());
 /**
  * 获取数据流并保存在req.input里面
  */
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     let reqData = [];
     let size = 0;
     req.on('data', (data) => {
@@ -59,8 +59,8 @@ app.use(express.static(__dirname + '/include'));
  * 全局处理，比如验证key等信息
  */
 app.use((req, res, next) => {
-    if(config && config.domain && config.domain !== '') {
-        if (req.headers.host === (config.domain || '127.0.0.1')) {
+    if (config && config.host && config.host !== '') {
+        if (req.headers.host === config.host) {
             next();
         } else {
             res.status(404).send('NOT FOUND!!!');
@@ -68,10 +68,10 @@ app.use((req, res, next) => {
     } else {
         next();
     }
-//     console.log('%s http://%s%s', req.method, req.headers.host, req.url);
-//     console.log(req.headers);
-//     console.log(basic.getIP(req));
-//     next();
+    //     console.log('%s http://%s%s', req.method, req.headers.host, req.url);
+    //     console.log(req.headers);
+    //     console.log(basic.getIP(req));
+    //     next();
 });
 
 /**
@@ -84,7 +84,7 @@ app.all('/:key/:mode', (req, res, next) => {
      * 格式化数据流数据为JSON格式
      * @type {{}}
      */
-    if (req.input.key == (process.env.KEY || "ireoo")) {
+    if (req.input.key === condif.key) {
         next();
     } else {
         res.status(404).send("授权失败!请勿越权使用!");
@@ -95,7 +95,7 @@ app.all('/:key/:mode', routes.mongoDB);
 /**
  * 设置服务器端口为2012
  */
-const server = app.listen(process.env.PORT || 2012, () => {
+const server = app.listen(config.port, () => {
     console.log('Listening on port %s:%d', server.address().address, server.address().port);
 });
 
