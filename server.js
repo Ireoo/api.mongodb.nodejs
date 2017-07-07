@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const logger = require('morgan');
 const routes = require('./routes');
-const config = require('./config');
+const config = require('./config') || {};
 const compression = require('compression');
 
 /**
@@ -98,4 +98,5 @@ app.all('/:key/:mode', routes.mongoDB);
 const server = app.listen(config.port, () => {
     console.log('Listening on port %s:%d', server.address().address, server.address().port);
 });
+
 
