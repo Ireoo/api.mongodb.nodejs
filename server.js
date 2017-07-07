@@ -32,8 +32,8 @@ app.use(function (req, res, next) {
     });
     req.on('end', () => {
         // console.log('>>>req end');
-        console.log(Buffer.concat(reqData, size));
-        req.input = JSON.parse(Buffer.concat(reqData, size) || "{}");
+        // console.log(Buffer.concat(reqData, size));
+        req.input = JSON.parse(Buffer.concat(reqData, size).toString() === '' ? "{}" : Buffer.concat(reqData, size));
     });
     next();
 });
