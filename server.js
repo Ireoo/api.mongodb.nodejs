@@ -32,7 +32,7 @@ app.use(function (req, res, next) {
     });
     req.on('end', () => {
         // console.log('>>>req end');
-        req.input = JSON.parse(Buffer.concat(reqData, size));
+        req.input = JSON.parse(Buffer.concat(reqData, size) || "{}");
     });
     next();
 });
