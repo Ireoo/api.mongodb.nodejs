@@ -85,7 +85,7 @@ app.all('/:key/:mode', (req, res, next) => {
      * 格式化数据流数据为JSON格式
      * @type {{}}
      */
-    if (req.input.key === condif.key) {
+    if (req.input.key === config.key) {
         next();
     } else {
         res.status(404).send("授权失败!请勿越权使用!");
