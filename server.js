@@ -2,7 +2,7 @@
  * Created by S2 on 15/7/7.
  */
 const express = require('express');
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const app = express();
 const logger = require('morgan');
 const routes = require('./routes');
@@ -26,23 +26,20 @@ app.use(function (req, res, next) {
     let reqData = [];
     let size = 0;
     req.on('data', (data) => {
-        // console.log('>>>req on');
         reqData.push(data);
         size += data.length;
     });
     req.on('end', () => {
-        // console.log('>>>req end');
-        // console.log(Buffer.concat(reqData, size));
         req.input = JSON.parse(Buffer.concat(reqData, size).toString() === '' ? "{}" : Buffer.concat(reqData, size));
+        next();
     });
-    next();
 });
 
 /**
  * 处理数据流成POST数据
  */
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
 
 /**
  * 设置默认网页路径，并设置网页后缀
@@ -80,7 +77,8 @@ app.use((req, res, next) => {
  */
 app.all('/', routes.index);
 
-app.all('/:key/:mode', (req, res, next) => {
+app.all(/^\/([a-zA-Z0-9]+)\/([a-zA-Z0-9]+)$/, (req, res, next) => {
+    console.log(req.input);
     /**
      * 格式化数据流数据为JSON格式
      * @type {{}}
@@ -91,7 +89,7 @@ app.all('/:key/:mode', (req, res, next) => {
         res.status(404).send("授权失败!请勿越权使用!");
     }
 });
-app.all('/:key/:mode', routes.mongoDB);
+app.all(/^\/([a-zA-Z0-9]+)\/([a-zA-Z0-9]+)$/, routes.mongoDB);
 
 /**
  * 设置服务器端口为2012

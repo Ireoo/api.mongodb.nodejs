@@ -18,8 +18,8 @@ const connect = process.env.MONGODB_CONNECTION || '';
  * @type {mongojs}
  */
 let mongodb;
-if (connect == '') {
-    if (username == '' && password == '') {
+if (connect === '') {
+    if (username === '' && password === '') {
         mongodb = mongojs(addr + ':' + port + '/' + instance);
     } else {
         mongodb = mongojs(username + ':' + password + '@' + addr + ':' + port + '/' + instance);
@@ -62,7 +62,10 @@ exports.index = (req, res, next) => {
  */
 exports.mongoDB = (req, res, next) => {
 
-    if (req.params.key && req.params.key != '' && req.params.key != 'undefined') {
+    req.params.key = req.params[0];
+    req.params.mode = req.params[1];
+
+    if (req.params.key && req.params.key !== '' && req.params.key !== 'undefined') {
 
         /**
          * 切换到 {req.params.key} 数据表
@@ -84,11 +87,11 @@ exports.mongoDB = (req, res, next) => {
          * 格式化数据流里各项参数where, data, other为JSON格式
          * @type {{}}
          */
-        let where = JSON.stringify(input.where) == '[]' || !input.where ? {} : input.where;
-        let data = JSON.stringify(input.data) == '[]' || !input.data ? {} : input.data;
-        let other = JSON.stringify(input.other) == '[]' || !input.other ? {} : input.other;
+        let where = JSON.stringify(input.where) === '[]' || !input.where ? {} : input.where;
+        let data = JSON.stringify(input.data) === '[]' || !input.data ? {} : input.data;
+        let other = JSON.stringify(input.other) === '[]' || !input.other ? {} : input.other;
 
-        if (where.hasOwnProperty('_id') && where._id != '') {
+        if (where.hasOwnProperty('_id') && where._id !== '') {
             where._id = mongojs.ObjectId(where._id);
         }
         	
@@ -113,8 +116,8 @@ exports.mongoDB = (req, res, next) => {
                  * 执行查找命令
                  */
             case 'find':
-                sort = JSON.stringify(other.sort) == '[]' || !other.sort ? {} : other.sort;
-                show = JSON.stringify(other.show) == '[]' || !other.show ? {} : other.show;
+                sort = JSON.stringify(other.sort) === '[]' || !other.sort ? {} : other.sort;
+                show = JSON.stringify(other.show) === '[]' || !other.show ? {} : other.show;
                 skip = other.skip || 0;
                 limit = other.limit || 0;
 
@@ -133,7 +136,7 @@ exports.mongoDB = (req, res, next) => {
                  * 执行查找一条数据命令
                  */
             case 'findone':
-                show = JSON.stringify(other.show) == '[]' || !other.show ? {} : other.show;
+                show = JSON.stringify(other.show) === '[]' || !other.show ? {} : other.show;
                 db.findOne(where, show, (err, result) => {
                     console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
                     res.send(err ? err : result);
@@ -144,7 +147,7 @@ exports.mongoDB = (req, res, next) => {
                  * 执行聚合查询命令
                  */
             case 'distinct':
-                dis = JSON.stringify(other.distinct) == '[]' || !other.distinct ? '' : other.distinct;
+                dis = JSON.stringify(other.distinct) === '[]' || !other.distinct ? '' : other.distinct;
                 db.distinct(dis, where, (err, result) => {
                     console.log("[output] --> ".info + (err ? JSON.stringify(err).error : JSON.stringify(result).data));
                     res.send(err ? err : result);
