@@ -96,7 +96,7 @@ exports.mongoDB = (req, res, next) => {
         }
         	
         	// 定义变量
-        	let sort, show, skip, limit, sql, dis;
+        	var sort, show, skip, limit, sql, dis;
 
         /**
          * 主体程序入口处
