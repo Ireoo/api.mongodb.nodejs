@@ -13,5 +13,9 @@
     "morgan": "*",
     "babel-polyfill": "*",
     "babel-register": "*"
+  },
+  "engines": {
+    "node": "6.1.x",
+    "npm": "5.3.x"
   }
 }
