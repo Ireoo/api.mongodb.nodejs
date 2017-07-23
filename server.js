@@ -2,7 +2,6 @@
  * Created by S2 on 15/7/7.
  */
 const express = require('express');
-// const bodyParser = require('body-parser');
 const app = express();
 const logger = require('morgan');
 const routes = require('./routes');
@@ -23,8 +22,8 @@ app.use(compression());
  * 获取数据流并保存在req.input里面
  */
 app.use(function (req, res, next) {
-    let reqData = [];
-    let size = 0;
+    var reqData = [];
+    var size = 0;
     req.on('data', (data) => {
         reqData.push(data);
         size += data.length;
