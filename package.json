@@ -5,12 +5,13 @@
   "main": "server.js",
   "private": true,
   "dependencies": {
-    "body-parser": "*",
     "colors": "*",
-    "compression": "^1.6.2",
+    "compression": "*",
     "ejs": "*",
     "express": "*",
     "mongojs": "*",
-    "morgan": "*"
+    "morgan": "*",
+    "babel-polyfill": "*",
+    "babel-register": "*"
   }
 }

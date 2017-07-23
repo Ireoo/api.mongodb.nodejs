@@ -17,7 +17,7 @@ const connect = process.env.MONGODB_CONNECTION || '';
  * 设置mongodb数据库连接
  * @type {mongojs}
  */
-var mongodb;
+let mongodb;
 if (connect === '') {
     if (username === '' && password === '') {
         mongodb = mongojs(addr + ':' + port + '/' + instance);
@@ -70,13 +70,13 @@ exports.mongoDB = (req, res, next) => {
         /**
          * 切换到 {req.params.key} 数据表
          */
-        var db = eval("mongodb." + req.params.key);
+        let db = eval("mongodb." + req.params.key);
 
         /**
          * 格式化数据流数据为JSON格式
          * @type {{}}
          */
-        var input = req.input;
+        let input = req.input;
 
         /**
          * 调试输出获取的数据流信息
@@ -87,16 +87,16 @@ exports.mongoDB = (req, res, next) => {
          * 格式化数据流里各项参数where, data, other为JSON格式
          * @type {{}}
          */
-        var where = JSON.stringify(input.where) === '[]' || !input.where ? {} : input.where;
-        var data = JSON.stringify(input.data) === '[]' || !input.data ? {} : input.data;
-        var other = JSON.stringify(input.other) === '[]' || !input.other ? {} : input.other;
+        let where = JSON.stringify(input.where) === '[]' || !input.where ? {} : input.where;
+        let data = JSON.stringify(input.data) === '[]' || !input.data ? {} : input.data;
+        let other = JSON.stringify(input.other) === '[]' || !input.other ? {} : input.other;
 
         if (where.hasOwnProperty('_id') && where._id !== '') {
             where._id = mongojs.ObjectId(where._id);
         }
         	
         	// 定义变量
-        	var sort, show, skip, limit, sql, dis;
+        	let sort, show, skip, limit, sql, dis;
 
         /**
          * 主体程序入口处
