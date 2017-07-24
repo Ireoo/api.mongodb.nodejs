@@ -10,8 +10,6 @@
     "ejs": "*",
     "express": "*",
     "mongojs": "*",
-    "morgan": "*",
-    "babel-polyfill": "*",
-    "babel-register": "*"
+    "morgan": "*"
   }
 }
