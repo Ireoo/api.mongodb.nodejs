@@ -5,7 +5,7 @@ const express = require('express');
 const app = express();
 const logger = require('morgan');
 const routes = require('./routes');
-const config = require('./config') || {port: process.env.PORT || 80, key: process.env.KEY || 'test'};
+const config = require('./config') || {host: process.env.HOST || '', port: process.env.PORT || 80, key: process.env.KEY || 'test'};
 const compression = require('compression');
 
 /**
