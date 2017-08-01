@@ -5,28 +5,13 @@ const mongojs = require('mongojs');
 /**
  * 获取mongodb数据库参数
  */
-const port = 27017;
-const addr = 'localhost';
-const instance = 'api';
-const password = '';
-const username = '';
-
-const connect = process.env.MONGODB_CONNECTION || '';
+const connect = process.env.MONGODB_CONNECTION || '127.0.0.1:27017/api';
 
 /**
  * 设置mongodb数据库连接
  * @type {mongojs}
  */
-let mongodb;
-if (connect === '') {
-    if (username === '' && password === '') {
-        mongodb = mongojs(addr + ':' + port + '/' + instance);
-    } else {
-        mongodb = mongojs(username + ':' + password + '@' + addr + ':' + port + '/' + instance);
-    }
-} else {
-    mongodb = mongojs(connect);
-}
+let mongodb = mongojs(connect);
 
 /**
  * 初始化颜色主题
