@@ -19,6 +19,17 @@ app.use(logger('[:date[iso]] :remote-addr[:remote-user] ":method :url HTTP/:http
 app.use(compression());
 
 /**
+ * 允许跨域访问
+ */
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
+
+/**
  * 获取数据流并保存在req.input里面
  */
 app.use(function (req, res, next) {
