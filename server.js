@@ -104,7 +104,7 @@ app.all(/^\/([a-zA-Z0-9]+)\/([a-zA-Z0-9]+)$/, routes.mongoDB);
 /**
  * 申请ssl证书设置
  */
-app.all('/.well-known/acme-challenge/(.*)', (req, res, next) => {
+app.all(/^\/.well-known\/acme-challenge\/(.*)$/, (req, res, next) => {
     res.status(200).send(process.env[req.params[0]]);
 });
 
