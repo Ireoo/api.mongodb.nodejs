@@ -102,6 +102,13 @@ app.all(/^\/([a-zA-Z0-9]+)\/([a-zA-Z0-9]+)$/, (req, res, next) => {
 app.all(/^\/([a-zA-Z0-9]+)\/([a-zA-Z0-9]+)$/, routes.mongoDB);
 
 /**
+ * 申请ssl证书设置
+ */
+app.all('/.well-known/acme-challenge/(.*)', (req, res, next) => {
+    res.status(200).send(process.env[req.params[0]]);
+});
+
+/**
  * 设置服务器端口默认为80
  */
 const server = app.listen(config.port, () => {
