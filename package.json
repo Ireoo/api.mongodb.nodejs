@@ -1,15 +1,20 @@
 {
-  "name": "API.MongoDB",
-  "description": "mongodb api basic",
-  "version": "0.0.1",
-  "main": "server.js",
-  "private": true,
-  "dependencies": {
-    "colors": "*",
-    "compression": "*",
-    "ejs": "*",
-    "express": "*",
-    "mongojs": "*",
-    "morgan": "*"
-  }
+    "name": "API.MongoDB",
+    "description": "mongodb api basic",
+    "version": "1.0.0",
+    "main": "server.js",
+    "scripts": {
+        "certs": "cp ./nginx/api.conf /etc/nginx/conf/api.conf",
+        "updata": "apt update && apt upgrade -y && apt install letsencrypt -y && service nginx stop && letsencrypt certonly --standalone --agree-tos --email s@ireoo.com -d api.qiyi.io && service nginx start",
+        "start": "node server.js"
+    },
+    "private": true,
+    "dependencies": {
+        "colors": "*",
+        "compression": "*",
+        "ejs": "*",
+        "express": "*",
+        "mongojs": "*",
+        "morgan": "*"
+    }
 }
