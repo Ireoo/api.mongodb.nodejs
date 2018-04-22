@@ -4,13 +4,18 @@
     "version": "1.0.0",
     "main": "server.js",
     "scripts": {
-        "init": "npm run certs && npm run mongodb && npm run pm2",
+        "init": "npm run certs",
+        "postinit": "npm run mongodb && npm run pm2",
 
         "write": "sed -i 's/api.qiyi.io/api.qiyi.io/g' ./nginx/api.conf",
 
-        "certs": "npm run certs:init && npm run certs:install && npm run certs:nginx && npm run certs:renew",
+        "precerts": "npm run certs:init",
+        "certs": "npm run certs:install",
+        "postcerts": "npm run certs:nginx && npm run certs:renew",
         "certs:init": "apt update && apt upgrade -y && apt install letsencrypt -y",
-        "certs:install": "service nginx stop && letsencrypt certonly --standalone --agree-tos --email s@ireoo.com -d api.qiyi.io && service nginx start",
+        "precerts:install": "service nginx stop",
+        "certs:install": "letsencrypt certonly --standalone --agree-tos --email s@ireoo.com -d api.qiyi.io",
+        "postcerts:install": "service nginx start",
         "certs:nginx": "apt update && apt upgrade -y && apt install nginx -y && cp ./nginx/api.conf /etc/nginx/conf.d/api.conf && nginx -s reload",
         "certs:renew": "echo '* 5 * * * service nginx stop & letsencrypt renew & service nginx start' >> /etc/crontab",
 
