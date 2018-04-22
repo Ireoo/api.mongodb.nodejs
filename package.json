@@ -1,12 +1,34 @@
 {
-    "name": "API.MongoDB",
-    "description": "mongodb api basic",
+    "name": "api",
+    "description": "mongodb api basic with nodejs",
     "version": "1.0.0",
     "main": "server.js",
     "scripts": {
-        "certs": "cp ./nginx/api.conf /etc/nginx/conf.d/api.conf && nginx -s reload",
-        "update": "apt update && apt upgrade -y && apt install letsencrypt -y && service nginx stop && letsencrypt certonly --standalone --agree-tos --email s@ireoo.com -d api.qiyi.io && service nginx start",
-        "start": "node server.js"
+        "init": "npm run certs && npm run mongodb && npm run pm2",
+
+        "write": "sed -i 's/api.qiyi.io/api.qiyi.io/g' ./nginx/api.conf",
+
+        "certs": "npm run certs:init && npm run certs:install && npm run certs:nginx && npm run certs:renew",
+        "certs:init": "apt update && apt upgrade -y && apt install letsencrypt -y",
+        "certs:install": "service nginx stop && letsencrypt certonly --standalone --agree-tos --email s@ireoo.com -d api.qiyi.io && service nginx start",
+        "certs:nginx": "apt update && apt upgrade -y && apt install nginx -y && cp ./nginx/api.conf /etc/nginx/conf.d/api.conf && nginx -s reload",
+        "certs:renew": "echo '* 5 * * * service nginx stop & letsencrypt renew & service nginx start' >> /etc/crontab",
+
+        "pm2": "npm run pm2:install && npm run pm2:start && npm run pm2:startup",
+        "pm2:install": "npm i -g pm2",
+        "prepm2:start": "cp ./config.js-example ./config.js",
+        "pm2:start": "pm2 start server.js -n API --watch --max_memory_restart 400M",
+        "pm2:startup": "pm2 startup && pm2 save",
+
+        "mongodb": "npm run mongodb:key && npm run mongodb:source && npm run mongodb:install && npm run mongodb:start",
+        "mongodb:key": "sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5",
+        "mongodb:source": "echo 'deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse' | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list",
+        "mongodb:install": "sudo apt-get update && sudo apt-get install -y mongodb-org",
+        "mongodb:start": "sudo service mongod start && systemctl enable mongod",
+
+        "start": "node server.js",
+
+        "reload": "git checkout -- ."
     },
     "private": true,
     "dependencies": {
