@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "main": "server.js",
     "scripts": {
-        "init": "npm run certs && npm run mongodb && npm run pm2",
+        "init": "npm run mongodb && npm run pm2 && npm run certs",
 
         "write": "sed -i 's/api.qiyi.io/${SITE}/g' ./nginx/api.conf",
 
@@ -22,7 +22,7 @@
         "pm2": "npm run pm2:install && npm run pm2:start && npm run pm2:startup",
         "pm2:install": "npm i -g pm2",
         "prepm2:start": "cp ./config.js-example ./config.js",
-        "pm2:start": "pm2 start server.js -n API --watch --max_memory_restart 400M",
+        "pm2:start": "pm2 start server.js -n API --watch --max-memory-restart 400M",
         "pm2:startup": "pm2 startup && pm2 save",
 
         "mongodb": "npm run mongodb:key && npm run mongodb:source && npm run mongodb:install && npm run mongodb:start",
