@@ -1,47 +1,59 @@
 {
-    "name": "api",
-    "description": "mongodb api basic with nodejs",
-    "version": "1.0.0",
-    "main": "server.js",
-    "scripts": {
-        "init": "npm run mongodb && npm run pm2 && npm run certs",
-
-        "write": "sed -i 's/api.qiyi.io/${SITE}/g' ./nginx/api.conf",
-
-        "precerts": "npm run certs:init",
-        "certs": "npm run certs:install",
-        "postcerts": "npm run certs:nginx && npm run certs:renew",
-        "certs:init": "apt update && apt upgrade -y && apt install letsencrypt nginx -y",
-        "precerts:install": "service nginx stop",
-        "certs:install": "letsencrypt certonly --standalone --agree-tos --email s@ireoo.com -d ${SITE}",
-        "postcerts:install": "service nginx start",
-        "precerts:nginx": "npm run write",
-        "certs:nginx": "apt update && apt upgrade -y && apt install nginx -y && cp ./nginx/api.conf /etc/nginx/conf.d/api.conf && nginx -s reload",
-        "certs:renew": "echo '* 5 * * * service nginx stop & letsencrypt renew & service nginx start' >> /etc/crontab",
-
-        "pm2": "npm run pm2:install && npm run pm2:start && npm run pm2:startup",
-        "pm2:install": "npm i -g pm2",
-        "prepm2:start": "cp ./config.js-example ./config.js",
-        "pm2:start": "pm2 start server.js -n API --watch --max-memory-restart 400M",
-        "pm2:startup": "pm2 startup && pm2 save",
-
-        "mongodb": "npm run mongodb:key && npm run mongodb:source && npm run mongodb:install && npm run mongodb:start",
-        "mongodb:key": "sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5",
-        "mongodb:source": "echo 'deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse' | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list",
-        "mongodb:install": "sudo apt-get update && sudo apt-get install -y mongodb-org",
-        "mongodb:start": "sudo service mongod start && systemctl enable mongod",
-
-        "start": "node server.js",
-
-        "reload": "git checkout -- ."
-    },
-    "private": true,
-    "dependencies": {
-        "colors": "*",
-        "compression": "*",
-        "ejs": "*",
-        "express": "*",
-        "mongojs": "*",
-        "morgan": "*"
-    }
+	"name": "api",
+	"description": "mongodb api basic with nodejs",
+	"version": "1.0.0",
+	"main": "app.js",
+	"scripts": {
+		"init": "npm run mongodb && npm run pm2 && npm run certs",
+		"write": "sed -i 's/api.qiyi.io/${SITE}/g' ./nginx/api.conf",
+		"precerts": "npm run certs:init",
+		"certs": "npm run certs:install",
+		"postcerts": "npm run certs:nginx && npm run certs:renew",
+		"certs:init": "apt update && apt upgrade -y && apt install letsencrypt nginx -y",
+		"precerts:install": "service nginx stop",
+		"certs:install": "letsencrypt certonly --standalone --agree-tos --email s@ireoo.com -d ${SITE}",
+		"postcerts:install": "service nginx start",
+		"precerts:nginx": "npm run write",
+		"certs:nginx": "apt update && apt upgrade -y && apt install nginx -y && cp ./nginx/api.conf /etc/nginx/conf.d/api.conf && nginx -s reload",
+		"certs:renew": "echo '* 5 * * * service nginx stop & letsencrypt renew & service nginx start' >> /etc/crontab",
+		"pm2": "npm run pm2:install && npm run pm2:start && npm run pm2:startup",
+		"pm2:install": "npm i -g pm2",
+		"prepm2:start": "cp ./config.js-example ./config.js",
+		"pm2:start": "pm2 start server.js -n API --watch --max-memory-restart 400M",
+		"pm2:startup": "pm2 startup && pm2 save",
+		"mongodb": "npm run mongodb:key && npm run mongodb:source && npm run mongodb:install && npm run mongodb:start",
+		"mongodb:key": "sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5",
+		"mongodb:source": "echo 'deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse' | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list",
+		"mongodb:install": "sudo apt-get update && sudo apt-get install -y mongodb-org",
+		"mongodb:start": "sudo service mongod start && systemctl enable mongod",
+		"start": "node app.js",
+		"test": "nodemon -e .js app.js",
+		"reload": "git checkout -- .",
+		"precommit": "lint-staged"
+	},
+	"lint-staged": {
+		"*.{js,json}": ["prettier --write", "git add"]
+	},
+	"private": true,
+	"dependencies": {
+		"body-parser": "^1.18.3",
+		"colors": "^1.3.1",
+		"compression": "^1.7.3",
+		"express": "^4.16.3",
+		"koa": "^2.5.2",
+		"koa-body": "^4.0.4",
+		"koa-bodyparser": "^4.2.1",
+		"koa-logger": "^3.2.0",
+		"koa-router": "^7.4.0",
+		"koa2-cors": "^2.0.6",
+		"md5": "^2.2.1",
+		"mongojs": "^2.6.0",
+		"morgan": "^1.9.0"
+	},
+	"devDependencies": {
+		"husky": "^0.14.3",
+		"lint-staged": "^7.2.0",
+		"nodemon": "^1.18.3",
+		"prettier": "^1.14.0"
+	}
 }
