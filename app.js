@@ -73,9 +73,6 @@ const server = app.listen(process.env.PORT || 2018, () => {
 /**
  * 处理错误
  */
-process.on("uncaughtException", (error, res) => {
-	console.log("Caught exception: ", error, res);
-	// res.send({
-	//     error
-	// });
+process.on("uncaughtException", error => {
+	console.log("Caught exception: ", error);
 });
