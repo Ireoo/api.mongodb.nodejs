@@ -6,6 +6,7 @@ const app = express();
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const compression = require("compression");
+const mongojs = require("./lib/mongojs");
 
 /**
  * 显示访问信息
@@ -33,6 +34,23 @@ app.use((req, res, next) => {
 });
 
 /**
+ * 设置数据库
+ */
+app.use((req, res, next) => {
+	/**
+	 * 获取mongodb数据库参数
+	 */
+	const connect = process.env.MONGODB || "127.0.0.1:27017/api";
+
+	/**
+	 * 设置mongodb数据库连接
+	 * @type {mongojs}
+	 */
+	req.mongodb = mongojs(connect);
+	next();
+});
+
+/**
  * 获取数据流并保存在 req.data 里面
  */
 app.use((req, res, next) => {
@@ -43,8 +61,15 @@ app.use((req, res, next) => {
 		size += data.length;
 	});
 	req.on("end", () => {
-		req.data = JSON.parse(Buffer.concat(reqData, size).toString() === "" ? "{}" : Buffer.concat(reqData, size));
-		next();
+		try {
+			req.data = JSON.parse(Buffer.concat(reqData, size).toString() === "" ? "{}" : Buffer.concat(reqData, size));
+			next();
+		} catch (error) {
+			res.send({
+				error: `提交的数据格式错误，请提交json格式的文本`,
+				data: Buffer.concat(reqData, size).toString() === "" ? "{}" : Buffer.concat(reqData, size).toString()
+			});
+		}
 	});
 });
 
@@ -54,9 +79,19 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 app.use(
 	bodyParser.urlencoded({
-		extended: true
+		extended: false
 	})
 );
+
+// app.use('/:table/:mode', (req, res, next) => {
+//     res.send({
+//         params: req.params,
+//         body: req.body,
+//         query: req.query,
+//         data: req.data
+//     });
+//     next();
+// })
 
 /**
  * 路由规则
