@@ -15,9 +15,9 @@
         "precerts:install": "service nginx stop",
         "certs:install": "letsencrypt certonly --standalone --agree-tos --email s@ireoo.com -d ${SITE}",
         "postcerts:install": "service nginx start",
-        "precerts:nginx": "npm run write",
+        "precerts:nginx": "",
         "certs:nginx": "apt update && apt upgrade -y && apt install nginx -y && cp ./nginx/api.conf /etc/nginx/conf.d/api.conf && nginx -s reload",
-        "certs:renew": "echo '* 5 * * * service nginx stop & letsencrypt renew & service nginx start' >> /etc/crontab",
+        "certs:renew": "echo '* 5 * * * root service nginx stop & letsencrypt renew & service nginx start' >> /etc/crontab",
 
         "pm2": "npm run pm2:install && npm run pm2:start && npm run pm2:startup",
         "pm2:install": "npm i -g pm2",
@@ -27,7 +27,7 @@
 
         "mongodb": "npm run mongodb:key && npm run mongodb:source && npm run mongodb:install && npm run mongodb:start",
         "mongodb:key": "sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5",
-        "mongodb:source": "echo 'deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse' | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list",
+        "mongodb:source": "echo 'deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.0 multiverse' | sudo tee /etc/apt/sources.list.d/mongodb-org.list",
         "mongodb:install": "sudo apt-get update && sudo apt-get install -y mongodb-org",
         "mongodb:start": "sudo service mongod start && systemctl enable mongod",
 
