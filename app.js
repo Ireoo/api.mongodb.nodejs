@@ -4,7 +4,6 @@
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
-const bodyParser = require("body-parser");
 const compression = require("compression");
 const mongojs = require("./lib/mongojs");
 
@@ -62,36 +61,19 @@ app.use((req, res, next) => {
 	});
 	req.on("end", () => {
 		try {
-			req.data = JSON.parse(Buffer.concat(reqData, size).toString() === "" ? "{}" : Buffer.concat(reqData, size));
+			req.data = JSON.parse(
+				Buffer.concat(reqData, size).toString() === "" ? "{}" : Buffer.concat(reqData, size).toString()
+			);
 			next();
 		} catch (error) {
 			res.send({
-				error: `提交的数据格式错误，请提交json格式的文本`,
-				data: Buffer.concat(reqData, size).toString() === "" ? "{}" : Buffer.concat(reqData, size).toString()
+				success: false,
+				message: `提交的数据格式错误,请提交json格式的文本`,
+				data: Buffer.concat(reqData, size).toString
 			});
 		}
 	});
 });
-
-/**
- * 处理数据流成POST数据
- */
-app.use(bodyParser.json());
-app.use(
-	bodyParser.urlencoded({
-		extended: false
-	})
-);
-
-// app.use('/:table/:mode', (req, res, next) => {
-//     res.send({
-//         params: req.params,
-//         body: req.body,
-//         query: req.query,
-//         data: req.data
-//     });
-//     next();
-// })
 
 /**
  * 路由规则

@@ -23,6 +23,8 @@ router.auth = true;
 router.path = "/";
 
 router.all("/:table/:mode", (req, res, next) => {
+	console.log(req.body, req.params, req.query, req.data);
+
 	// return res.send({
 	//     params: req.params,
 	//     body: req.body,
